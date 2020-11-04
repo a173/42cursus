@@ -6,7 +6,7 @@
 /*   By: acaryn <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 20:27:40 by acaryn            #+#    #+#             */
-/*   Updated: 2020/11/02 22:16:54 by acaryn           ###   ########.fr       */
+/*   Updated: 2020/11/04 18:26:17 by acaryn           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,16 @@ static char	*ft_create_array(unsigned int j, int min, unsigned int new)
 	unsigned int	i;
 
 	i = 0;
-	if ((buf = ft_calloc(j + min, 1)) != NULL)
+	if ((buf = ft_calloc(j + 1, 1)) != NULL)
 	{
-		if (min)
-			buf[i] = '-';
-		while (i < j - min)
+		while (j != 0)
 		{
-			buf[j - i - 1] = new % 10 + 48;
+			buf[j - 1] = new % 10 + 48;
 			new /= 10;
-			i++;
+			j--;
 		}
+		if (min)
+			buf[0] = '-';
 	}
 	return (buf);
 }
@@ -37,7 +37,7 @@ char		*ft_itoa(int n)
 	unsigned int	i;
 	unsigned int	j;
 	unsigned int	new;
-	int				min;
+	unsigned int	min;
 
 	if (n == 0)
 		return (ft_strdup("0"));
@@ -52,7 +52,7 @@ char		*ft_itoa(int n)
 	else
 		new = (unsigned int)n;
 	i = new;
-	while (i > 0)
+	while (i != 0)
 	{
 		i /= 10;
 		j++;
