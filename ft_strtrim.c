@@ -6,7 +6,7 @@
 /*   By: acaryn <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 17:40:36 by acaryn            #+#    #+#             */
-/*   Updated: 2020/11/02 22:23:29 by acaryn           ###   ########.fr       */
+/*   Updated: 2020/11/04 19:16:35 by acaryn           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char		*ft_strtrim(char const *s1, char const *set)
 	if (!s1)
 		return (buf = ft_calloc(1, 1));
 	if (!set)
-		return (buf = ft_strdup(set));
+		return (buf = ft_strdup(s1));
 	i = ft_finder_set((char*)s1, (char*)set, 1);
 	n = ft_finder_set((char*)s1, (char*)set, -1);
 	if (!s1[i])
