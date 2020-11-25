@@ -1,0 +1,40 @@
+FROM debian:buster
+
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN apt-get -y install nginx
+RUN apt-get -y install mariadb-server
+RUN apt-get -y install php-fpm php-mysql
+RUN apt-get -y install php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
+
+RUN apt-get -y install wget
+RUN wget https://wordpress.org/latest.tar.gz
+RUN tar -xzvf latest.tar.gz
+RUN rm -rf latest.tar.gz
+RUN mv wordpress/ /var/www/wp
+COPY ./srcs/wp-config.php /var/www/wp
+RUN chown -R www-data:www-data /var/www/wp
+RUN find /var/www/wp/ -type d -exec chmod 775 {} +
+RUN find /var/www/wp/ -type f -exec chmod 664 {} +
+RUN chmod 660 /var/www/wp/wp-config.php
+
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz
+RUN tar -xzvf phpMyAdmin-5.0.4-all-languages.tar.gz
+RUN rm -rf phpMyAdmin-5.0.4-all-languages.tar.gz
+RUN mv phpMyAdmin-5.0.4-all-languages/ /var/www/phpmyadmin
+COPY ./srcs/config.inc.php /var/www/phpmyadmin
+
+COPY ./srcs/nginx.conf /etc/nginx/sites-available/nginx.conf
+RUN ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled
+RUN rm -rf /etc/nginx/sites-enabled/default
+COPY ./srcs/db.sh .
+RUN bash db.sh
+RUN rm -rf db.sh
+COPY ./srcs/ssl.sh .
+RUN bash ssl.sh
+RUN rm -rf ssl.sh
+COPY ./srcs/autoindex.sh .
+COPY ./srcs/start.sh .
+
+EXPOSE 80 443
+CMD bash start.sh
